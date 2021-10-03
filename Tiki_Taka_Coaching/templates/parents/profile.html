@@ -5,6 +5,49 @@
 
 <h1>Hello and welcome {{request.user}} hope your child is doing good </h1>
 
+{% if not parent.PlayerName %}
 
+<div class="container">
+<h1>You have not mention yoru child Username</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Getdata</button>
+    </form>
+    <h4 id="player" class="d-none">Player with this username doest not exists</h4>
+</div>
+
+{% endif %}
 
 {% endblock content %}
+
+{% block js %}
+
+<script>
+    $("#get").click(e=>{
+        console.log("je");
+        let username = document.getElementById("username").value;
+        let parent = "{{request.user}}"
+        console.log(parent);
+        $.ajax({
+            url:"{% url 'addplayer' %}",
+            method:"GET",
+            data:{
+                "username":username,
+                "parent": parent
+            },
+            success: response=>{
+                if(response.status == 200) {
+                    window.location.href = `http://127.0.0.1:8000/viewprofile/${response.player}`                                           
+                }else {
+                    $("#player").removeClass("d-none").fadeToggle(3000);
+                }
+            }
+        })
+    })
+
+</script>
+
+
+
+{% endblock js %}

@@ -1,0 +1,30 @@
+{% load static %}
+{% for data in vedios %}
+
+    {% for week , value in data.items  %}
+        {% if value %}
+        <h1>{{week}}</h1>
+        {% for content in value %}
+
+        <h5>{{content.VedioTitle}}</h5>
+        <h5>{{content.Desc}}</h5>
+        <video class="embed-responsive embed-responsive-16by9" poster = "{{content.thumbnail.url}}" id="{{content.id}}" width="140" preload="none" height="140"controls="controls">
+            <source src="{{content.vedio.url}}" type="video/mp4"/>
+        </video>
+
+        <a href="{% url 'deletevedio' content.id %}" class="btn btn-danger" type="button">Delete</a>
+        
+        {% endfor %}
+        {% else %}
+            <script>
+                document.getElementById("vedio1").classList.add("d-none");
+                document.getElementById("vedio2").classList.remove("d-none");
+            </script>
+        {% endif %}
+    {% endfor %}
+
+
+
+
+
+{% endfor %}

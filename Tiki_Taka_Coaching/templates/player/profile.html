@@ -1,8 +1,200 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block css %}
+
+.marbot{
+    margin-bottom: 7px;
+	padding-bottom:2px;
+    font-size: 13px;
+}
+.borderbot{ border-bottom: 1px solid #efeeee;}
+.star{color:#f7ab21; font-size:17px;}
+.titlesize{font-weight:600;}
+.choose{font-size:13px;}
+.pad_top{padding-top:1%;}
+.card_box{box-shadow:1px 1px 7px 1px #e3e1e3;}
+.titlecenter{text-align:center;}
+.button1{padding:5px; font-size:12px;}
+.textright{text-align:right;}
+.pad_0{padding:0px;}
+
+hr{
+    border: 1px solid red;
+}
+
+
+{% endblock css %}
 
 {% block content %}
-<h1>Welcome {{request.user}} ! Hope you like our services </h1>
 
+<div class="container">
+    <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-2 col-lg-8 col-xl-8 pad_top">
+        <div class="card card_box">
+            <div class="card-body">
+                <div class="row pad_top">
+
+                    {% comment %} {% if player.CoachName %}
+                    <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-9 col-lg-2 col-xl-2 textright pad_0">
+                        <p class="marbot titlesize"><a type="button" href="#"
+                                class="btn btn-outline-secondary btn-sm button1">Coach Profile</a>
+                    </div>
+                    {% else %}
+                    <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-9 col-lg-2 col-xl-2 textright pad_0">
+                        <p class="marbot titlesize"><button type="button"
+                                class="btn btn-outline-secondary btn-sm button1">No coach assigned to you </button>
+                    </div>
+                    {% endif %} {% endcomment %}
+                    <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-9 col-lg-2 col-xl-2 textright pad_0 ">
+                        <p class="marbot titlesize"><a type="button" href="{% url 'editprofile' user.id %}"
+                                class="btn btn-outline-secondary btn-sm  button1"><i class="fa fa-pencil"
+                                    aria-hidden="true"></i></a>
+                    </div>
+                </div>
+                <h4 class="card-title titlecenter fs-2">{{user.username}} Details</h4>
+                <div class="row pad_top">
+                    <div
+                        class="col-xs-4 offset-sm-4 col-sm-4 col-md-4 offset-lg-0 col-lg-4  offset-lg-0 col-xl-4 pad_top">
+                        <div class="card">
+                            <div class="">
+                                <p class="card-text"> <img class="card-img-top" src="{% static 'images/student.png' %}"
+                                        alt="Card image"></p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 pad_top">
+                        <div class="row">
+                            <div class="col-6 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <p class="marbot titlesize">Full Name </p>
+                            </div>
+                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                <p class="marbot borderbot">{{user.first_name}} {{user.last_name}}</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <p class="marbot titlesize">Email Id </p>
+                            </div>
+                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                <p class="marbot borderbot">{{user.email}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <p class="marbot titlesize">Mobile No.</p>
+                            </div>
+                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                <p class="marbot borderbot"> {% if player.PlayerCellNumber %}
+                                    {{player.PlayerCellNumber}} {% else %} Details not available {% endif %}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <p class="marbot titlesize">Date Of Birth </p>
+                            </div>
+                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                <p class="marbot borderbot"> {% if player.PlayerDob %} {{player.PlayerDob}} {% else %}
+                                    Details not available {% endif %}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <p class="marbot titlesize">Rank</p>
+                            </div>
+                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                <p class="marbot borderbot">{{player.Rank}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <p class="marbot titlesize">Date of Joining</p>
+                            </div>
+                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                <p class="marbot borderbot"> {{user.date_joined}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <p class="marbot titlesize">Last Login</p>
+                            </div>
+                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                <p class="marbot borderbot"> {{user.last_login}}</p>
+                            </div>
+                        </div>
+                        <hr>
+                        {% if coach %}
+                        <h4 class="card-title titlecenter">Coach Details</h4>
+                        <div class="row">
+                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <p class="marbot titlesize">Coach Name </p>
+                            </div>
+                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                <p class="marbot borderbot"> {{coach.CoachId.first_name}}  {{coach.CoachId.last_name}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <p class="marbot titlesize">Contact Details  </p>
+                            </div>
+                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                <p class="marbot borderbot">{{coach.CoachNumber}}</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <h3 class="text-center alert alert-danger">Wait Until we assign a coach to you </h3>
+                        {% endif %}
+                        {% comment %} <div class="row">
+                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <p class="marbot titlesize">Profile Rating</p>
+                            </div>
+                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                <p class="marbot borderbot"> <i class="fa fa-star star" aria-hidden="true"></i> <i
+                                        class="fa fa-star star star" aria-hidden="true"></i> <i
+                                        class="fa fa-star-half-empty star"></i> <i class="fa fa-star-o star"></i></p>
+                            </div>
+                        </div> {% endcomment %}
+                    </div>
+                </div>
+
+                {% comment %} profile {% endcomment %}
+                {% comment %} <div class="row pad_top">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pad_top">
+                        <p class="marbot titlesize">Student Bio</p>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <p class="marbot borderbot">Lorem Ipsum is simply dummy text of the printing and typesetting
+                            industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when
+                            an unknown printer took a galley of type and scrambled it to make a type specimen book. It
+                            has survived not only five centuries, but also the leap into electronic typesetting,
+                            remaining essentially unchanged.</p>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pad_top">
+                        <p class="marbot titlesize">Area Of Interest</p>
+                    </div>
+                    <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3"> <input type="checkbox" id="defaultCheck"
+                            name="example2"><label for="defaultCheck" class="choose"> &nbsp; AL & ML</label></div>
+                    <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3"> <input type="checkbox" id="defaultCheck"
+                            name="example2"><label for="defaultCheck" class="choose"> &nbsp; Block Chain</label></div>
+                    <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3"> <input type="checkbox" id="defaultCheck"
+                            name="example2"><label for="defaultCheck" class="choose"> &nbsp; Computer Vision</label>
+                    </div>
+                    <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3"> <input type="checkbox" id="defaultCheck"
+                            name="example2"><label for="defaultCheck" class="choose"> &nbsp; Other</label></div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pad_top">
+                        <p class="marbot titlesize">Paper's Published Till Date</p>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <p class="marbot borderbot">1-Sep-2021</p>
+                    </div>
+                </div> {% endcomment %}
+                <!---row----> 
+            </div>
+            <!---card body-->
+            <hr>
+        </div>
+    </div>
+</div>
 
 {% endblock content %}

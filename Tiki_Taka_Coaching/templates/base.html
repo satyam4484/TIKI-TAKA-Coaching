@@ -7,11 +7,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
+    <script src="https://kit.fontawesome.com/2b8d05eca5.js" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <style>
+    body{
+        background-color:#f4f0f4;
+    }
+
+    {% block css %}{% endblock css %}
+    </style>
+
+
+    <title>Tiki-Taka Coaching</title>
   </head>
   <body>
+    {% include 'navbar.html' %}
+
+    {% if messages %}
+            {% for message in messages %}
+                <div {% if message.tags %}class="alert alert-{{message.tags}} text-center fs-3 ms" {% endif %}  role="alert">
+                    {{message}}
+                </div>
+            {% endfor %}
+        {% endif %}
+
     {% block content %}
     
     {% endblock content %}
@@ -25,6 +45,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
     -->
     <script src="{% static 'js/jquery.js' %}"></script>
+    <script>
+      setTimeout(() => {
+              $(".ms").fadeToggle(1000);
+      }, 2000);
+    </script>
 
     {% block js %}
     {% endblock js %}

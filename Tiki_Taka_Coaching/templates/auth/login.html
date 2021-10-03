@@ -1,23 +1,86 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-<div class="container mt-4 bg-grey">
-    <div class="row">
-        <div class="col-sm-8" id="player">
-            <h1>Signin  </h1>
-            <form action="" method="post">
-                {% csrf_token %}
-                {% for fm in form %}
-                {{fm.label_tag}} {{fm}} {{fm.errors|striptags}}<br><br>
-                {% endfor %}
-                <input type="submit" value="Signup">
-            </form>
-            
+<div class="container mt-5 bg-grey">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-12 col-xl-11">
+        <div class="card text-black" style="border-radius: 25px;">
+          <div class="card-body p-md-5">
+            <div class="row justify-content-center">
+                <h1 class="text-center fw-bold">Welcome to Tiki Taka Coaching </h1>
+              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+
+                <p class="text-center h1 fw-bold mb-2 mx-1 mx-md-4">{{formtype}}</p>
+
+                <form class="mx-1 mx-md-4" method="post">
+                    {% csrf_token %}
+                    {% for form in form %}
+                    <div class="d-flex flex-row align-items-center mb-4">
+                       
+                        <div class="form-outline flex-fill mb-0">
+                        {% comment %} <input type="text" id="form3Example1c" class="form-control" /> {% endcomment %}
+                         <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                        <label class="form-label" for="form3Example1c">{{form.label_tag}}</label>
+                        {{form}}
+                        <small>{{form.erros|striptags}}</small>
+                        </div>
+                    </div>
+                  {% endfor %}
+                  {% if val %}
+                    <span>Select the one </span><br>
+                    <div class="form-check form-check-inline">
+                    <input class="form-check-input " checked="checked"type="radio" name="inlineRadioOptions" id="playersign" value="Player">
+                    <label class="form-check-label" for="playersign">Player</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="coachsign" value="Coach">
+                    <label class="form-check-label" for="coachsign">Coach</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="parentsign" value="Parent">
+                    <label class="form-check-label" for="parentsign">Parent</label>
+                    </div>
+                  
+                  {% endif %}
+                  <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4 mt-2">
+                    <button type="submit" class="btn btn-outline-danger btn-md btn-rounded btn-navbar waves-effect waves-light">{{formtype|slice:":6"}}</button>
+                  </div>
+
+                </form>
+
+              </div>
+              <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+                <img src="{% static 'images/football1.jpg' %}" class="img-fluid " alt="Sample image">
+              </div>
+            </div>
+          </div>
         </div>
-        
+      </div>
     </div>
-</div>
+  </div>
 
 
 {% endblock content %}
+
+
+{% block js %}
+<script>
+
+ let usertype = document.getElementById("usertype");
+    
+    $("#coachsign").click((e)=>{
+        usertype.value = "coach";
+    })
+    $("#parentsign").click((e)=>{
+        usertype.value = "parent";
+    })
+    $("#playersign").click((e)=>{
+        usertype.value = "player";
+    })
+
+</script>
+
+
+{% endblock js %}

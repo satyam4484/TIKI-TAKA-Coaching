@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-5 bg-grey">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-lg-12 col-xl-11">
+        <div class="card text-black" style="border-radius: 25px;">
+          <div class="card-body p-md-5">
+            <div class="row justify-content-center">
+                    <p class="text-center h1 fw-bold mb-2 mx-1 mx-md-4">Edit profile </p>
+
+                <form class="mx-1 mx-md-4" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                    <div class="col-sm-6">
+                    {% for form in form1 %}
+                    <div class="align-items-center mb-4">
+                       
+                        <div class="form-outline flex-fill mb-0">
+                        {% comment %} <input type="text" id="form3Example1c" class="form-control" /> {% endcomment %}
+                         <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                        <label class="form-label" for="form3Example1c">{{form.label_tag}}</label>
+                        {{form}}
+                        <small>{{form.erros|striptags}}</small>
+                        </div>
+                    </div>
+                  {% endfor %}
+                  </div>
+                    <div class="col-sm-6">
+                        {% for form in form2 %}
+                        <div class="align-items-center mb-4">
+                        
+                            <div class="form-outline flex-fill mb-0">
+                            {% comment %} <input type="text" id="form3Example1c" class="form-control" /> {% endcomment %}
+                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                            <label class="form-label" for="form3Example1c">{{form.label_tag}}</label>
+                            {{form}}
+                            <small>{{form.erros|striptags}}</small>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4 mt-2">
+                    <button type="submit" class="btn btn-outline-danger btn-md btn-rounded btn-navbar waves-effect waves-light">Update</button>
+                  </div>
+
+                </form>
+
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+{% endblock content %}
