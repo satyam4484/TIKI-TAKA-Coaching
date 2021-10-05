@@ -1,30 +1,63 @@
 {% load static %}
-{% for data in vedios %}
+<div class="container-fluid">
+{% for content in vedios %}
+                {% for key,value in content.items %}
+                {% if value %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="{{key}}1">
+                        <button class="accordion-button fw-bold fs-2" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#{{key}}" aria-expanded="false" aria-controls="{{key}}">
+                            {{key}}
+                        </button>
+                    </h2>
+                    <div id="{{key}}" class="accordion-collapse collapse" aria-labelledby="{{key}}"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <ul class="list-group borderradius_0">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 table_head fw-bold">
+                                            <h4>Video</h4>
+                                        </div>
+                                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 table_head">
+                                            <h4>Title </h4>
+                                        </div>
+                                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 table_head">
+                                            <h4>Description</h4>
+                                        </div>
+                                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 table_head">
+                                            <h4>Action</h4>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    {% for vedio in value %}
+                                    <div class="row">
 
-    {% for week , value in data.items  %}
-        {% if value %}
-        <h1>{{week}}</h1>
-        {% for content in value %}
+                                        <div class="col-lg-3">
+                                            <video class="embed-responsive embed-responsive-16by9" poster="{{vedio.thumbnail.url}}"
+                                                id="{{content.id}}" width="300" preload="none" height="150" controls="controls">
+                                                <source src="{{vedio.vedio.url}}" type="video/mp4" />
+                                            </video>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <p class="description_text">{{vedio.VedioTitle}}</p>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <p class="description_text">{{vedio.Desc}} </p>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <a href="{% url 'deletevedio' vedio.id %}" class="btn btn-danger ">Delete</a>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
 
-        <h5>{{content.VedioTitle}}</h5>
-        <h5>{{content.Desc}}</h5>
-        <video class="embed-responsive embed-responsive-16by9" poster = "{{content.thumbnail.url}}" id="{{content.id}}" width="140" preload="none" height="140"controls="controls">
-            <source src="{{content.vedio.url}}" type="video/mp4"/>
-        </video>
-
-        <a href="{% url 'deletevedio' content.id %}" class="btn btn-danger" type="button">Delete</a>
-        
-        {% endfor %}
-        {% else %}
-            <script>
-                document.getElementById("vedio1").classList.add("d-none");
-                document.getElementById("vedio2").classList.remove("d-none");
-            </script>
-        {% endif %}
-    {% endfor %}
-
-
-
-
-
-{% endfor %}
+</div>

@@ -3,23 +3,75 @@ from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
 from .forms import Signupform, LoginForm,userchangeform,PlayerUpdateForm,ParentUpdateForm
-from Coach.forms import CoachUpdateForm
+from Coach.forms import CoachUpdateForm,SubmitVedio
 # Create your views here.
-from Coach.models import CoachData
+from Coach.models import CoachData,Category,VedioSubmission,VedioContent
 from django.contrib.auth import authenticate, forms, get_user_model
 User = get_user_model()
 from .models import ParentData,PlayerData
 from django.contrib.auth import login,logout
 from django.contrib import messages
 
+def VedioDetails(request,pk):
+    if request.user.is_authenticated and User.objects.get(username=request.user).UserType == "player":
+        vedio = VedioContent.objects.get(pk=pk)
+        player = PlayerData.objects.get(PlayerId = request.user.id)
+        try:
+            submission = VedioSubmission.objects.get(vedio=vedio)
+        except:
+            submission = None
+        
+        if request.method == "POST":
+            submit = SubmitVedio(request.POST,request.FILES)
+            if submit.is_valid():
+                try:
+                    submission = VedioSubmission.objects.get(vedio=vedio,player=player)
+                except:
+                    submission = None
+                if submission:
+                    submission.UploadedVedio = submit.cleaned_data['UploadedVedio']
+                    submission.marks = 0
+                    submission.save()
+                else:
+                    instance = submit.save(commit=False)
+                    instance.player = player
+                    instance.vedio = vedio
+                    instance.save()
+                return HttpResponseRedirect(f'{request.META.get("HTTP_REFERER")}')
+        else:
+            submit = SubmitVedio()
 
-def Courses(request):
-    if request.user.is_authenticated and User.objects.get(username = request.user).UserType =="player":
-        return render(request,'player/course.html')
+        context = {
+            'vedio':vedio,
+            'submission':submission,
+            'form':submit
+        }
+        return render(request,"player/detailvedio.html",context)
     else :
-        messages.error(request,"You don't have access to this page ")
+        messages.error(request,"You Don't have access to this page!")
         return HttpResponseRedirect('/')
 
+def PlayerCourse(request):
+    if request.user.is_authenticated and User.objects.get(username=request.user).UserType == "player":
+        vedios=[]
+        cat = Category.objects.values()
+        coach = CoachData.objects.get(CoachId = PlayerData.objects.get(PlayerId=request.user.id).CoachName)
+
+        for item in cat:
+            vedio = VedioContent.objects.filter(category=item['id'],author=coach)
+            content = []
+            for ved in vedio:
+                content.append(ved)
+            vedios.append({f'{item["CatName"]}':content})
+
+        context = {
+            'vedios':vedios,
+        }
+
+        return render(request,'player/course.html',context)
+    else:
+        messages.error(request,"You Don't have access to this page ")
+        return HttpResponseRedirect('/')
 
 def home(request):
     val = 0
@@ -42,10 +94,16 @@ def PlayerHome(request):
             coach = CoachData.objects.get(CoachId = player.CoachName)
         except:
             coach = None
+        submission = VedioSubmission.objects.filter(player__PlayerId=request.user,submit = True)
+
+        # print(player.PlayerId.id)
+        
         context = {
             'player':player,
             'user':user,
-            'coach':coach
+            'coach':coach,
+            'submission':submission,
+            'pp':0,
         }
         return render(request,'player/profile.html',context)
     else :
@@ -54,12 +112,21 @@ def PlayerHome(request):
 # update user profile
 def ViewPlayerProfile(request,pk):
     player = PlayerData.objects.get(pk=pk)
-    
+    user = User.objects.get(username = player.PlayerId)
+    submission = VedioSubmission.objects.filter(player__PlayerId=player.PlayerId,submit = True)
+    try :
+        coach = CoachData.objects.get(CoachId = player.CoachName)
+    except:
+        coach = None
     context ={
         'player':player,
+        'user':user,
+        'submission':submission,
+        'coach':coach,
+        'pp':0
         
     }
-    return render(request,'player/viewplayer.html',context);
+    return render(request,'player/profile.html',context);
 
 
 

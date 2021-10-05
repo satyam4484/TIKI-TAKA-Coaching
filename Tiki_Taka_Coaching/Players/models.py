@@ -16,8 +16,7 @@ class PlayerData(models.Model):
     PlayerCellNumber=models.CharField(max_length=15,blank=True)
     PlayerDob = models.DateField(null=True,blank=True)
     CoachName = models.ForeignKey('Coach.CoachData',on_delete=models.CASCADE,null=True)
-    Rank = models.IntegerField(default=0)
-    PlayerProgress = models.IntegerField(default=0)
+    score = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         return self.PlayerId.username

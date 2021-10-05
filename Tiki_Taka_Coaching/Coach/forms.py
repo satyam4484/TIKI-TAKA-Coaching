@@ -1,6 +1,6 @@
 from django import forms
 from django.db.models import fields 
-from .models import CoachData,Category,VedioContent
+from .models import CoachData,Category,VedioContent,VedioSubmission
 
 class CoachUpdateForm(forms.ModelForm):
     CoachDetails = forms.CharField(label_suffix='',label='Coach Details',widget=forms.Textarea(attrs={'class':'form-control'}))
@@ -26,3 +26,17 @@ class UploadVedio(forms.ModelForm):
     class Meta:
         model = VedioContent
         fields= ['category','VedioTitle','Desc','thumbnail','vedio']
+
+
+class SubmitVedio(forms.ModelForm):
+    UploadedVedio = forms.FileField(label_suffix='',label='Vedio',widget=forms.FileInput(attrs={'class':'form-control'}))
+
+    class Meta:
+        model = VedioSubmission
+        fields = ['UploadedVedio']
+
+class AssignMarks(forms.ModelForm):
+    marks = forms.IntegerField(label='Grade',label_suffix='',widget=forms.NumberInput(attrs={'class':'form-control','placeholder':'Enter marks out of 10'}))
+    class Meta:
+        model = VedioSubmission
+        fields= ['marks']

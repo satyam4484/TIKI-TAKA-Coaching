@@ -1,7 +1,5 @@
-
 from django.urls import path 
-
-from .views import (UserSignup ,UserLogin,PlayerHome, Userlogout,ViewPlayerProfile,home,EditProfile,Courses)
+from .views import (UserSignup ,UserLogin,PlayerHome, Userlogout,ViewPlayerProfile,home,EditProfile,PlayerCourse,VedioDetails)
 from .parents import (ParentHome,AddParentChild)
 urlpatterns = [ 
     path('',home,name='home'),
@@ -14,8 +12,10 @@ urlpatterns = [
 
     #player
     path('player/profile/',PlayerHome,name='playerhome'),
-    path('viewprofile/<int:pk>',ViewPlayerProfile,name='playerprofile'),
-    path('player/courses/',Courses,name='course'),
+    path('player/viewprofile/<int:pk>',ViewPlayerProfile,name='playerprofile'),
+    path('player/courses/',PlayerCourse,name='course'),
+    path('player/vedios/<int:pk>',VedioDetails,name='vediodetails'),
+
 
 
     # parent

@@ -13,5 +13,5 @@ class VedioAdmin(admin.ModelAdmin):
 
 @admin.register(VedioSubmission)
 class SubmissionAdmin(admin.ModelAdmin):
-    list_display=['id','vedio','player','date','UploadedVedio','marks']
+    list_display=['id','vedio','player','date','UploadedVedio','marks','submit']
     

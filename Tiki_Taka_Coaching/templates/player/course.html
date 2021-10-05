@@ -1,18 +1,89 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block css %}
+body{
+	background-color: rgb(13, 12, 26);
+}
 
+video {
+	/* override other styles to make responsive */
+	width: 50%    !important;
+	height: auto   !important;
+	{% comment %} border-radius: 40px; {% endcomment %}
+  }
 
-{% block content  %} 
+{% endblock css %}
 
-<h1>Welcome to course website hope you will like our course </h1>
+{% block content %}
 
+<div class="container">
+<div class=" col-xs-12 col-sm-12  col-md-12  col-lg-12 col-xl-12 pad_top1">
+    <div class="card card_box">
+        <div class="card-body">
+            <h1 class="text-center fs-1 fw-bold">Welcome To course {{request.user}}  <a href="{% url 'playerhome' %}"  class="fs-5 btn btn-secondary float-end">Profile</a></h1>
+            
+            <div class="accordion mt-5" id="accordionExample">
+                {% for content in vedios %}
+                {% for key,value in content.items %}
+                {% if value %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="{{key}}1">
+                        <button class="accordion-button fw-bold fs-2" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#{{key}}" aria-expanded="false" aria-controls="{{key}}">
+                            {{key}}
+                        </button>
+                    </h2>
+                    <div id="{{key}}" class="accordion-collapse collapse" aria-labelledby="{{key}}"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <ul class="list-group borderradius_0">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 table_head fw-bold">
+                                            <h4>Video</h4>
+                                        </div>
+                                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 table_head">
+                                            <h4>Title </h4>
+                                        </div>
+                                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 table_head">
+                                            <h4>Description</h4>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    {% for vedio in value %}
+                                    <div class="row">
 
+                                        <div class="col-lg-4">
+                                            <video class="embed-responsive embed-responsive-16by9" poster="{{vedio.thumbnail.url}}"
+                                                id="{{content.id}}" width="300" preload="none" height="150" controls="controls">
+                                                <source src="{{vedio.vedio.url}}" type="video/mp4" />
+                                            </video>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <p class="description_text">{{vedio.VedioTitle}}</p>
+                                            <a href="{% url 'vediodetails' vedio.id %}" class="btn btn-primary">Watch It here </a>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <p class="description_text">{{vedio.Desc}} </p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% endfor %}
+            </div>
 
+        </div>
+    </div>
+    <!---card body-->
+</div>
+</div>
 
-
-{% endblock content  %} 
-
-
-
-
-
+{% endblock content %}

@@ -1,19 +1,50 @@
+from django import forms
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from Players.models import PlayerData
-from .models import CoachData,Category,VedioContent
-from .forms import UploadVedio
+from .models import CoachData,Category,VedioContent, VedioSubmission
+from .forms import UploadVedio,AssignMarks
 from django.contrib import messages
 # Create your views here.
+def WatchSubmission(request,pk):
+    vedio = VedioSubmission.objects.get(pk = pk)
+    player = PlayerData.objects.get(PlayerId = vedio.player)
+    print(player)
+    if request.method == "POST":
+        form  = AssignMarks(request.POST)
+        if form.is_valid():
+            mks = form.cleaned_data['marks']
+            vedio.marks = mks
+            if mks > 3:
+                vedio.submit = True
+                player.score = player.score + mks
+                player.save()
+            vedio.save()
+            
+            return HttpResponseRedirect('/coach/profile/')
+    else:
+        form = AssignMarks()
+    context = {
+        'vedio':vedio,
+        'form':form
+    }
+    return render(request,'coach/watch.html',context)
+
 
 def CoachProfile(request):
     if request.user.is_authenticated and User.objects.get(username=request.user).UserType=="coach":
         PendingPlayer = PlayerData.objects.filter(CoachName = None)
-        Trainingplayers = PlayerData.objects.filter(CoachName = request.user.id).order_by('-Rank');
+        Trainingplayers = PlayerData.objects.filter(CoachName = request.user.id).order_by('-score');
         user = User.objects.get(username= request.user)
         coach = CoachData.objects.get(CoachId = user.id)
+
+        submission = VedioSubmission.objects.filter(player__CoachName= coach,submit=False,marks=None)
+
+
+        # form to upload vedio 
+        # -----------------------------------------------------------------------------
         if request.method == "POST":
             form = UploadVedio(request.POST,request.FILES)
             if form.is_valid():
@@ -38,14 +69,15 @@ def CoachProfile(request):
             val = {f'{cat["CatName"]}':content}
             vedios.append(val)
 
-        print(vedios)       
+        # print(vedios)       
         context = {
             'pendingplayer':PendingPlayer,
             'Trainingplayer':Trainingplayers,
             'user':user,
             'coach':coach,
             'form':form,
-            'vedios':vedios
+            'vedios':vedios,
+            'submission':submission
         }
         return render(request,'coach/profile.html',context)
     else :

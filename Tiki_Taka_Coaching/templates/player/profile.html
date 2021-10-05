@@ -20,7 +20,12 @@
 .pad_0{padding:0px;}
 
 hr{
-    border: 1px solid red;
+    border: 1px solid black;
+}
+video {
+  /* override other styles to make responsive */
+  width: 50%    !important;
+  height: auto   !important;
 }
 
 
@@ -28,29 +33,16 @@ hr{
 
 {% block content %}
 
-<div class="container">
+<div class="container-fluid">
     <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-2 col-lg-8 col-xl-8 pad_top">
         <div class="card card_box">
             <div class="card-body">
-                <div class="row pad_top">
-
-                    {% comment %} {% if player.CoachName %}
-                    <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-9 col-lg-2 col-xl-2 textright pad_0">
-                        <p class="marbot titlesize"><a type="button" href="#"
-                                class="btn btn-outline-secondary btn-sm button1">Coach Profile</a>
-                    </div>
-                    {% else %}
-                    <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-9 col-lg-2 col-xl-2 textright pad_0">
-                        <p class="marbot titlesize"><button type="button"
-                                class="btn btn-outline-secondary btn-sm button1">No coach assigned to you </button>
-                    </div>
-                    {% endif %} {% endcomment %}
-                    <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-9 col-lg-2 col-xl-2 textright pad_0 ">
-                        <p class="marbot titlesize"><a type="button" href="{% url 'editprofile' user.id %}"
-                                class="btn btn-outline-secondary btn-sm  button1"><i class="fa fa-pencil"
-                                    aria-hidden="true"></i></a>
-                    </div>
+                {% if pp %}
+                <div class="row pad_top">	
+                    <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-9 col-lg-2 col-xl-2 textright pad_0"><p class="marbot titlesize"><a  href="{% url 'course' %}" type="button" class="btn btn-outline-danger btn-sm button1">Go to Course</a></p></div>
+                    <div class=" col-xs-12 col-sm-12  col-md-12  col-lg-1 col-xl-1 textright "><p class="marbot titlesize"><a  href="{% url 'editprofile' user.id %}"type="button" class="btn btn-outline-secondary btn-sm  button1"><i class="fa fa-pencil" aria-hidden="true"></i></a></p></div>
                 </div>
+                {% endif %}
                 <h4 class="card-title titlecenter fs-2">{{user.username}} Details</h4>
                 <div class="row pad_top">
                     <div
@@ -101,10 +93,10 @@ hr{
                         </div>
                         <div class="row">
                             <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                <p class="marbot titlesize">Rank</p>
+                                <p class="marbot titlesize">Total Score</p>
                             </div>
                             <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                                <p class="marbot borderbot">{{player.Rank}}</p>
+                                <p class="marbot borderbot">{{player.score}}</p>
                             </div>
                         </div>
                         <div class="row">
@@ -143,53 +135,75 @@ hr{
                             </div>
                         </div>
                         {% else %}
-                        <h3 class="text-center alert alert-danger">Wait Until we assign a coach to you </h3>
+                            {% if pp %}
+                            <h3 class="text-center alert alert-danger">Wait Until we assign a coach to you </h3>
+                            
+                            {% endif %}
                         {% endif %}
-                        {% comment %} <div class="row">
-                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                <p class="marbot titlesize">Profile Rating</p>
-                            </div>
-                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                                <p class="marbot borderbot"> <i class="fa fa-star star" aria-hidden="true"></i> <i
-                                        class="fa fa-star star star" aria-hidden="true"></i> <i
-                                        class="fa fa-star-half-empty star"></i> <i class="fa fa-star-o star"></i></p>
-                            </div>
-                        </div> {% endcomment %}
                     </div>
+                {% if submission %}
+                {% if pp %}
+                <h1 class="mt-2 text-center fw-bold "> Your Submissions</h1>
+                {% else %}
+                <h1 class="mt-2 text-center fw-bold "> Player Submissions</h1>
+                {% endif %}
+                        <ul class="list-group borderradius_0">
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-4 col-sm-4 col-md-4 col-lg-4 table_head fw-bold">
+                                            <h4>Video</h4>
+                                        </div>
+                                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 table_head">
+                                            <h4>Title </h4>
+                                        </div>
+                                        
+                                        <div class="col-3 col-sm-3 col-md-3 col-lg-3 table_head">
+                                            <h4>Submit Date </h4>
+                                        </div>
+                                        <div class="col-2 col-sm-2 col-md-2 col-lg-2 table_head">
+                                            <h4>Marks </h4>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    {% for vedio in submission %}
+                                    <div class="row fw-bold fs-4">
+
+                                        <div class="col-lg-4">
+                                            <video class="embed-responsive embed-responsive-16by9" poster="{{vedio.thumbnail.url}}"
+                                                id="{{content.id}}" width="300" preload="none" height="150" controls="controls">
+                                                <source src="{{vedio.vedio.vedio.url}}" type="video/mp4" />
+                                            </video>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <p class="description_text">{{vedio.vedio.VedioTitle}}</p>
+                                        </div>
+                                        
+                                        <div class="col-lg-3">
+                                            <p class="description_text">{{vedio.date}} </p>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <p class="description_text">{{vedio.marks}} </p>
+                                        </div>
+                                        
+                                    </div>
+                                    <hr>
+                                    {% endfor %}
+                                </li>
+                            </ul>
+
+                {% for submit in Submissions %}
+                
+                    <h1>he</h1>
+                
+                
+                {% endfor %}
+                {% else %}
+                    <h1 class="alert alert-danger fw-bold">Not Submitted Any Vedio Till Now </h1>
+                {% endif %}
+
                 </div>
 
-                {% comment %} profile {% endcomment %}
-                {% comment %} <div class="row pad_top">
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pad_top">
-                        <p class="marbot titlesize">Student Bio</p>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <p class="marbot borderbot">Lorem Ipsum is simply dummy text of the printing and typesetting
-                            industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when
-                            an unknown printer took a galley of type and scrambled it to make a type specimen book. It
-                            has survived not only five centuries, but also the leap into electronic typesetting,
-                            remaining essentially unchanged.</p>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pad_top">
-                        <p class="marbot titlesize">Area Of Interest</p>
-                    </div>
-                    <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3"> <input type="checkbox" id="defaultCheck"
-                            name="example2"><label for="defaultCheck" class="choose"> &nbsp; AL & ML</label></div>
-                    <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3"> <input type="checkbox" id="defaultCheck"
-                            name="example2"><label for="defaultCheck" class="choose"> &nbsp; Block Chain</label></div>
-                    <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3"> <input type="checkbox" id="defaultCheck"
-                            name="example2"><label for="defaultCheck" class="choose"> &nbsp; Computer Vision</label>
-                    </div>
-                    <div class="col-12 col-sm-4 col-md-3 col-lg-3 col-xl-3"> <input type="checkbox" id="defaultCheck"
-                            name="example2"><label for="defaultCheck" class="choose"> &nbsp; Other</label></div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pad_top">
-                        <p class="marbot titlesize">Paper's Published Till Date</p>
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                        <p class="marbot borderbot">1-Sep-2021</p>
-                    </div>
-                </div> {% endcomment %}
-                <!---row----> 
+                
             </div>
             <!---card body-->
             <hr>

@@ -35,7 +35,8 @@ class VedioSubmission(models.Model):
     player = models.ForeignKey(PlayerData,on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     UploadedVedio = models.FileField(upload_to='upload/%y')
-    marks = models.IntegerField()
+    marks = models.IntegerField(null=True,blank=True)
+    submit = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.player} uploaded vedio to coach {self.vedio.author} on {self.date}'

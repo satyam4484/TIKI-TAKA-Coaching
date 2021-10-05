@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+
+hr{
+    border: 5px solid black;
+}
+
+video {
+  /* override other styles to make responsive */
+  width: 100%    !important;
+  height: auto   !important;
+  border-radius: 20px;
+}
+body{
+	background-color: rgb(13, 12, 26);
+}
+#more {display: none;}
+{% endblock css %}
+
+{% block content %}
+
+
+<div class="container-fluid mb-5">
+    <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-1 col-lg-8 col-xl-10 pad_top">
+        <div class="card card_box">
+            <div class="card-body">
+                <div class="row pad_top">	
+                    <a href="{% url 'course' %}" class="btn btn-danger" style="width:86px">Go back</a>
+                    <h1 class="text-center fw-bold fs-1"> TiTLE - {{vedio.VedioTitle}}</h1>
+                </div>
+                <div class="container">
+                    <video class="embed-responsive embed-responsive-16by9" poster = "{{vedio.thumbnail.url}}" id="{{content.id}}"  controls="controls" onclick="this.play()">
+                        <source src="{{vedio.vedio.url}}" type="video/mp4"/>
+                    </video>
+                </div>
+                <hr>
+                <h1 class="text-dark fw-bold fs-1">Description</h1>
+                <p class="text-dark fs-5">{{vedio.Desc}}</span></p>
+
+                <button onclick="myFunction()" id="myBtn" class="btn btn-secondary">Read more</button>
+                <br>
+            
+                {% if submission %}
+                    {% if submission.marks %}
+                        {% if submission.marks <= 3 %}
+                            <h1>You Vedio was not good you need to upload it again</h1>
+                            <button type="submit" id="upload" class="btn btn-warning mt-2">Submit your vedio</button>
+                                <div class="container d-none mt-2" id="vedio">
+                                    <form action="" method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        {% for data in form %}
+                                            {{data.label_tag}}
+                                            {{data}}
+                                            {{data.errors|striptags}}
+                                        {% endfor %}
+                                        <button type="submit" class="btn btn-success mt-2">Submit</button> <button class="btn btn-danger mt-2" id="cancel">Cancel</button>
+                                    </form>
+                                    
+                                </div>
+                        {% else %}
+                        <h1> You Got {{submission.marks}}/10</h1>
+                            
+                        {% endif %}
+
+                    {% else %}
+                        <h1 class="fw-bold alert-danger mt-1 text-center">Your Submission is under Review ! Wait For The Result </h1>
+                    {% endif %}
+                {% else %}
+                    <button type="submit" id="upload" class="btn btn-warning mt-2">Submit your vedio</button>
+                    <div class="container d-none mt-2" id="vedio">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% for data in form %}
+                                {{data.label_tag}}
+                                {{data}}
+                                {{data.errors|striptags}}
+                            {% endfor %}
+                            <button type="submit" class="btn btn-success mt-2">Submit</button> <button class="btn btn-danger mt-2" id="cancel">Cancel</button>
+                        </form>
+                        
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+
+{% block js %}
+
+<script>
+
+onclick = "this.paused ?this.play():this.pause();"
+
+document.getElementById("upload").addEventListener("click", e=>{
+    console.log("clicked");
+    e.target.classList.add("d-none");
+    document.getElementById("vedio").classList.remove("d-none");
+})
+
+document.getElementById("cancel").addEventListener("click",e=>{
+    console.log("cancel clicked");
+    document.getElementById("upload").classList.remove("d-none");
+    document.getElementById("vedio").classList.add("d-none");
+})
+
+function myFunction() {
+  var dots = document.getElementById("dots");
+  var moreText = document.getElementById("more");
+  var btnText = document.getElementById("myBtn");
+
+  if (dots.style.display === "none") {
+    dots.style.display = "inline";
+    btnText.innerHTML = "Read more";
+    moreText.style.display = "none";
+  } else {
+    dots.style.display = "none";
+    btnText.innerHTML = "Read less";
+    moreText.style.display = "inline";
+  }
+}
+</script>
+
+
+{% endblock js %}

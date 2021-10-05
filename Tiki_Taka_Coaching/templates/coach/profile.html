@@ -3,9 +3,9 @@
 {% block css %}
 
 .marbot{
-    margin-bottom: 7px;
-	padding-bottom:2px;
-    font-size: 13px;
+margin-bottom: 7px;
+padding-bottom:2px;
+font-size: 13px;
 }
 .borderbot{ border-bottom: 1px solid #efeeee;}
 .star{color:#f7ab21; font-size:17px;}
@@ -19,208 +19,263 @@
 .pad_0{padding:0px;}
 
 hr{
-    border: 3px solid green;
+border: 3px solid green;
 }
 
+video {
+	/* override other styles to make responsive */
+	width: 80%    !important;
+	height: auto   !important;
+	{% comment %} border-radius: 40px; {% endcomment %}
+  }
 {% endblock css %}
 
 {% block content %}
 
 
 <div class="container-fluid ">
-  <div class="row">
-    <div class=" col-xs-12 col-sm-8  col-md-12  col-lg-8 col-xl-7 pad_top">
-        <div class="card card_box shadow-lg">
-            <div class="card-body">
-                <div class="row pad_top">
+    <div class="row ">
+        <div class=" col-xs-12 col-sm-8  col-md-12  col-lg-8 col-xl-7 pad_top ">
 
-                    <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-9 col-lg-2 col-xl-2 textright pad_0 ">
-                        <p class="marbot titlesize"><a type="button" href="{% url 'editprofile' user.id %}"
-                                class="btn btn-outline-secondary btn-sm  button1"><i class="fa fa-pencil"
-                                    aria-hidden="true"></i></a>
+            {% comment %} profile {% endcomment %}
+            <div class="card card_box shadow-lg">
+                <div class="card-body">
+                    <div class="row pad_top">
+
+                        <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-9 col-lg-2 col-xl-2 textright pad_0 ">
+                            <p class="marbot titlesize"><a type="button" href="{% url 'editprofile' user.id %}"
+                                    class="btn btn-outline-secondary btn-sm  button1"><i class="fa fa-pencil"
+                                        aria-hidden="true"></i></a>
+                        </div>
                     </div>
+                    <h4 class="card-title titlecenter">{{user.username}} Details</h4>
+                    <div class="row pad_top">
+                        <div
+                            class="col-xs-4 offset-sm-4 col-sm-4 col-md-4 offset-lg-0 col-lg-4  offset-lg-0 col-xl-4 pad_top">
+                            <div class="card">
+                                <div class="">
+                                    <p class="card-text"> <img class="card-img-top"
+                                            src="{% static 'images/student.png' %}" alt="Card image"></p>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 pad_top">
+                            <div class="row">
+                                <div class="col-6 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <p class="marbot titlesize">Full Name </p>
+                                </div>
+                                <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                    <p class="marbot borderbot">{{user.first_name}} {{user.last_name}}</p>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <p class="marbot titlesize">Email Id </p>
+                                </div>
+                                <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                    <p class="marbot borderbot">{{user.email}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <p class="marbot titlesize">Mobile No.</p>
+                                </div>
+                                <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                    <p class="marbot borderbot"> {% if player.PlayerCellNumber %}
+                                        {{player.PlayerCellNumber}} {% else %} Details not available {% endif %}</p>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <p class="marbot titlesize">Date of Joining</p>
+                                </div>
+                                <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                    <p class="marbot borderbot"> {{user.date_joined}}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <p class="marbot titlesize">Last Login</p>
+                                </div>
+                                <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+                                    <p class="marbot borderbot"> {{user.last_login}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pad_top">
+                                <p class="marbot titlesize">Coach Bio</p>
+                            </div>
+
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <p class="marbot borderbot"> {% if coach.CoachDetails %}{{coach.CoachDetails}} {% else %} Not Availble {% endif %}</p>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
-                <h4 class="card-title titlecenter">{{user.username}} Details</h4>
-                <div class="row pad_top">
-                    <div
-                        class="col-xs-4 offset-sm-4 col-sm-4 col-md-4 offset-lg-0 col-lg-4  offset-lg-0 col-xl-4 pad_top">
-                        <div class="card">
-                            <div class="">
-                                <p class="card-text"> <img class="card-img-top" src="{% static 'images/student.png' %}"
-                                        alt="Card image"></p>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 pad_top">
-                        <div class="row">
-                            <div class="col-6 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                <p class="marbot titlesize">Full Name </p>
-                            </div>
-                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                                <p class="marbot borderbot">{{user.first_name}} {{user.last_name}}</p>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                <p class="marbot titlesize">Email Id </p>
-                            </div>
-                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                                <p class="marbot borderbot">{{user.email}}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                <p class="marbot titlesize">Mobile No.</p>
-                            </div>
-                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                                <p class="marbot borderbot"> {% if player.PlayerCellNumber %}
-                                    {{player.PlayerCellNumber}} {% else %} Details not available {% endif %}</p>
-                            </div>
-                        </div>
-                        
-                        
-                        <div class="row">
-                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                <p class="marbot titlesize">Date of Joining</p>
-                            </div>
-                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                                <p class="marbot borderbot"> {{user.date_joined}}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                <p class="marbot titlesize">Last Login</p>
-                            </div>
-                            <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                                <p class="marbot borderbot"> {{user.last_login}}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pad_top">
-                            <p class="marbot titlesize">Coach Bio</p>
-                        </div>
-
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <p class="marbot borderbot"> {% if coach.CoachDetails  %}{{coach.CoachDetails}} {% else %} Not Availble {% endif %}</p>
-                        </div>
-                        
-                        
-                    </div>
-                </div>
-
+                <!---card body-->
+                <hr>
             </div>
-            <!---card body-->
-            <hr>
+
+            {% comment %} vedios {% endcomment %}
+            <div class="card card_box shadow-lg">
+                <div class="card-body d-none" id="vedio">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for data in form %}
+                        {{data.label_tag}} {{data}} {{data.errors|striptags}} <br>
+                        {% endfor %}
+                        <input type="submit" class="btn btn-success" value="Upload"> <button type="button"
+                            class="btn btn-danger " id="cancel">Cancel</button>
+                    </form>
+
+                </div>
+                <div class="card-body">
+                    <button id="add" class="d-flex float-end fs-5  btn btn-success">Add vedios</button>
+                    <h4 class="card-title titlecenter mb-2 fs-2" id="vedio1">Your vedios </h4>
+                    <h4 class="card-title titlecenter mb-2 fs-2 d-none" id="vedio2">No vedios till now </h4>
+                    <hr class="mt-5">
+                    <div id="hidevedio">
+                        {% include 'coach/accordian.html' %}
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    {% comment %} right sidebar  {% endcomment %}
-    <div class="col-xs-12 col-sm-8  col-md-12  col-lg-8 col-xl-5 pad_top">
-      <div class="card card_box shadow-lg">
-              <div class="card-body">
-                  
-                  <h4 class="card-title titlecenter fs-2 alert alert-info">Training Players</h4>
-                  <hr>
-                  <table class="table thead-dark shadow-lg">
-                      <thead >
-                          <tr class="fs-5">
-                              <th>Sr.No</th>
-                              <th>Username </th>
-                              <th>Player Rank</th>
-                              <th>Player Profile</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                        {% for player in Trainingplayer %}
-                          <tr>
-                              <td>{{forloop.counter}}</td>
-                              <td>{{player.PlayerId.username}}</td>
-                              <td class="fw-bold mx-2">{{player.Rank}}</td>
-                              <td>to be implemented </td>
-                          </tr>
-                        {% endfor %}                 
-                      </tbody>
-                  </table>
-                  <hr>
+        {% comment %} right sidebar {% endcomment %}
+        <div class="col-xs-12 col-sm-8  col-md-12  col-lg-8 col-xl-5 pad_top">
+            <div class="card card_box shadow-lg ">
+                <div class="card-body">
 
-                  {% comment %} pending players  {% endcomment %}
-                  {% if pendingplayer %}
-                  <h4 class="card-title titlecenter fs-2 alert alert-primary">Pending Players </h4>
+                    <h4 class="card-title titlecenter fs-2 alert alert-info">Training Players</h4>
+                    <hr>
+                    <table class="table thead-dark shadow-lg">
+                        <thead>
+                            <tr class="fs-5">
+                                <th>Sr.No</th>
+                                <th>Username </th>
+                                <th>Players Score</th>
+                                <th>Players Profile</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for player in Trainingplayer %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{player.PlayerId.username}}</td>
+                                <td class="fw-bold mx-2">{{player.score}}</td>
+                                <td><a href="{% url 'playerprofile' player.PlayerId.id %}"> View Profile </a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <hr>
+
+                    {% comment %} pending players {% endcomment %}
+                    {% if pendingplayer %}
+                    <h4 class="card-title titlecenter fs-2 alert alert-primary">Pending Players </h4>
+                    <table class="table shadow-lg">
+                        <thead>
+                            <tr class="fs-5">
+                                <th>Sr.No</th>
+                                <th>Username </th>
+                                <th>Train</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for player in pendingplayer %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{player.PlayerId.username}}</td>
+                                <td><a type="button" href="{% url 'trainplayer' player.PlayerId.id %}"
+                                        class="btn btn-danger mx-2">Train</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
+
+                </div>
+                {% comment %} student submissions {% endcomment %}
+                {% if submission %}
+                    <h4 class="card-title titlecenter fs-2 alert alert-secondary">Players Submission </h4>
                   <table class="table shadow-lg">
                       <thead>
                           <tr class="fs-5">
                               <th>Sr.No</th>
                               <th>Username </th>
-                              <th>Train</th>
+                              <th>vediolink</th>
                           </tr>
                       </thead>
                       <tbody>
-                        {% for player in pendingplayer %}
-                          <tr>
-                              <td>{{forloop.counter}}</td>
-                              <td>{{player.PlayerId.username}}</td>
-                              <td><a  type="button" href="{% url 'trainplayer' player.PlayerId.id %}" class="btn btn-danger mx-2">Train</a></td>
-                          </tr>
-                        {% endfor %}                 
+                        {% for vedio in submission %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{vedio.player}}</td>
+                                <td><a href="{% url 'watchsubmission' vedio.id %} "><i class="fas fa-eye fa-lg"></i></a></td>
+                            </tr>
+                        {% endfor %}              
                       </tbody>
                   </table>
-                  {% endif %}
+                {% endif %}
 
-              </div>
-        </div>
-    </div>
+                {% comment %} pending players {% endcomment %}
+                {% if pendingplayer %}
+                <h4 class="card-title titlecenter fs-2 alert alert-primary">Pending Players </h4>
+                <table class="table shadow-lg">
+                    <thead>
+                        <tr class="fs-5">
+                            <th>Sr.No</th>
+                            <th>Username </th>
+                            <th>Train</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for player in pendingplayer %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{player.PlayerId.username}}</td>
+                            <td><a type="button" href="{% url 'trainplayer' player.PlayerId.id %}"
+                                    class="btn btn-danger mx-2">Train</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
 
-      {% comment %} new card {% endcomment %}
-    
-
-    {% comment %} add vedio  {% endcomment %}
-    <div class=" col-xs-12 col-sm-8  col-md-12  col-lg-8 col-xl-7 pad_top">
-        <div class="card card_box shadow-lg">
-            <div class="card-body d-none" id="vedio">
-                <form action="" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {% for data in form %}
-                        {{data.label_tag}} {{data}} {{data.errors|striptags}} <br>
-                    {% endfor %}
-                    <input type="submit" class="btn btn-success" value="Upload"> <button type="button" class="btn btn-danger " id="cancel">Cancel</button>
-                </form>
-                
-            </div>
-            <div class="card-body" >
-                <button id="add" class="d-flex float-end fs-5  btn btn-success">Add vedios</button>
-                <h4 class="card-title titlecenter mb-2 fs-2" id="vedio1">Your vedios </h4>
-                <h4 class="card-title titlecenter mb-2 fs-2 d-none" id="vedio2">No vedios till now  </h4>
-                <hr class="mt-5" >
-                {% include 'coach/accordian.html' %}
             </div>
         </div>
     </div>
 
-    
 </div>
 {% endblock content %}
 
 {% block js %}
 
 <script>
-document.getElementById("add").addEventListener("click", e=>{
-    // console.log('clicked');
-   document.getElementById("vedio").classList.remove("d-none");
-   document.getElementById("vedio1").classList.add("d-none");
-})
+    onclick = "this.paused ? this.play():this.pause();"
+    document.getElementById("add").addEventListener("click", e => {
+        // console.log('clicked');
+        document.getElementById("vedio").classList.remove("d-none");
+        document.getElementById("hidevedio").classList.add("d-none");
 
-document.getElementById("cancel").addEventListener("click",e=>{
-    // console.log("cancel");
-    document.getElementById("vedio").classList.add("d-none");
-    document.getElementById("vedio1").classList.remove("d-none");
+        document.getElementById("vedio1").classList.add("d-none");
+    })
 
-})
+    document.getElementById("cancel").addEventListener("click", e => {
+        // console.log("cancel");
+        document.getElementById("vedio").classList.add("d-none");
+        document.getElementById("hidevedio").classList.remove("d-none");
+
+        document.getElementById("vedio1").classList.remove("d-none");
+
+    })
 
 </script>
 
 {% endblock js %}
-
-
-
