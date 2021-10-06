@@ -1,13 +1,25 @@
 from django import forms
+from django.http.response import JsonResponse
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from Players.models import PlayerData
 from .models import CoachData,Category,VedioContent, VedioSubmission
-from .forms import UploadVedio,AssignMarks
+from .forms import UploadVedio,AssignMarks,CategoryForm
 from django.contrib import messages
-# Create your views here.
+
+# create acategory 
+def AddCategory(request):
+    try:
+       name = request.POST['category']
+       cat = Category.objects.create(CatName = name)
+       cat.save()
+       return JsonResponse({'status':200})
+    except:
+        return JsonResponse({'status':400})
+    
+# watch the submitted vedio 
 def WatchSubmission(request,pk):
     vedio = VedioSubmission.objects.get(pk = pk)
     player = PlayerData.objects.get(PlayerId = vedio.player)
@@ -32,15 +44,16 @@ def WatchSubmission(request,pk):
     }
     return render(request,'coach/watch.html',context)
 
-
+# view the coach profile 
 def CoachProfile(request):
     if request.user.is_authenticated and User.objects.get(username=request.user).UserType=="coach":
         PendingPlayer = PlayerData.objects.filter(CoachName = None)
         Trainingplayers = PlayerData.objects.filter(CoachName = request.user.id).order_by('-score');
+
         user = User.objects.get(username= request.user)
         coach = CoachData.objects.get(CoachId = user.id)
 
-        submission = VedioSubmission.objects.filter(player__CoachName= coach,submit=False,marks=None)
+        submission = VedioSubmission.objects.filter(player__CoachName= coach,submit=False)
 
 
         # form to upload vedio 
@@ -48,13 +61,11 @@ def CoachProfile(request):
         if request.method == "POST":
             form = UploadVedio(request.POST,request.FILES)
             if form.is_valid():
-                week = form.cleaned_data['category']
-                print(week)
-                # instance = form.save(commit=False)
-                # instance.user = request.user
-                # instance.save()
+                instance = form.save(commit=False)
+                instance.author = coach
+                instance.save()
                 messages.success(request,"Vedio uploaded successfully")
-                # return HttpResponseRedirect(f'{request.META.get("HTTP_REFERER")}')
+                return HttpResponseRedirect(f'{request.META.get("HTTP_REFERER")}')
         else:
             form = UploadVedio()
         # -------------------------------------------------------------------
@@ -77,12 +88,13 @@ def CoachProfile(request):
             'coach':coach,
             'form':form,
             'vedios':vedios,
-            'submission':submission
+            'submission':submission,
         }
         return render(request,'coach/profile.html',context)
     else :
         return HttpResponseRedirect('/')
 
+# delte the vedio 
 def DeleteVedio(request,pk):
     vedio = VedioContent.objects.get(pk=pk)
     vedio.delete()
@@ -99,6 +111,7 @@ def DeleteVedio(request,pk):
 ]
 
 '''
+# train players 
 
 def TrainPlayer(request,pk):
     if request.user.is_authenticated and User.objects.get(username=request.user).UserType=="coach":

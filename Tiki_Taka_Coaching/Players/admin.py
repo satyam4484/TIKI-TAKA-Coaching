@@ -9,7 +9,8 @@ class UserAdmin(admin.ModelAdmin):
 class PlayerAdmin(admin.ModelAdmin):
     list_display = ['PlayerId','PlayerCellNumber','PlayerDob','CoachName','score']
 
+
 @admin.register(ParentData)
 class ParentAdmin(admin.ModelAdmin):
-    list_display = ['ParentId','PlayerName','ParentDetails']
+    list_display = ['ParentId']
     

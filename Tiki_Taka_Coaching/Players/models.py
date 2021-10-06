@@ -24,8 +24,6 @@ class PlayerData(models.Model):
 
 class ParentData(models.Model):
     ParentId = models.OneToOneField(User,on_delete=models.CASCADE)
-    PlayerName = models.OneToOneField(PlayerData,on_delete=models.CASCADE,null=True)
-    ParentDetails = models.CharField(max_length=200)
 
     def __str__(self) -> str:
         return self.ParentId

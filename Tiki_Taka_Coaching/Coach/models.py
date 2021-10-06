@@ -11,13 +11,14 @@ class CoachData(models.Model):
     def __str__(self) -> str:
         return self.CoachId.username
 
-
+# category table 
 class Category(models.Model):
     CatName = models.CharField(max_length=50)
 
     def __str__(self) -> str:
         return self.CatName
 
+# vedio table 
 class VedioContent(models.Model):
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
     VedioTitle = models.CharField(max_length=200)
@@ -30,6 +31,7 @@ class VedioContent(models.Model):
     def __str__(self) -> str:
         return self.VedioTitle
 
+# submission vedio table 
 class VedioSubmission(models.Model):
     vedio = models.ForeignKey(VedioContent,on_delete=models.CASCADE)
     player = models.ForeignKey(PlayerData,on_delete=models.CASCADE)

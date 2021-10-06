@@ -28,6 +28,7 @@ video {
 	height: auto   !important;
 	{% comment %} border-radius: 40px; {% endcomment %}
   }
+
 {% endblock css %}
 
 {% block content %}
@@ -41,6 +42,7 @@ video {
             <div class="card card_box shadow-lg">
                 <div class="card-body">
                     <div class="row pad_top">
+                        <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-9 col-lg-2 col-xl-2 textright pad_0"><p class="marbot titlesize"><a  href="{% url 'changepassword' %}" type="button" class="btn btn-outline-danger btn-sm button1">Change Password</a></p></div>
 
                         <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-9 col-lg-2 col-xl-2 textright pad_0 ">
                             <p class="marbot titlesize"><a type="button" href="{% url 'editprofile' user.id %}"
@@ -83,8 +85,8 @@ video {
                                     <p class="marbot titlesize">Mobile No.</p>
                                 </div>
                                 <div class="col-12 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-                                    <p class="marbot borderbot"> {% if player.PlayerCellNumber %}
-                                        {{player.PlayerCellNumber}} {% else %} Details not available {% endif %}</p>
+                                    <p class="marbot borderbot"> {% if coach.CoachNumber %}
+                                        {{coach.CoachNumber}} {% else %} Details not available {% endif %}</p>
                                 </div>
                             </div>
 
@@ -125,6 +127,10 @@ video {
             {% comment %} vedios {% endcomment %}
             <div class="card card_box shadow-lg">
                 <div class="card-body d-none" id="vedio">
+                    <h4 class="fw-bold">Add Category</h4>
+                    <input type="text" name="Category" class="form-control" placeholder="Enter Week name like Week1" id="Category">
+                    <button type="submit" class="btn btn-primary mt-1 mb-5" id="btncl">Add</button>
+                    <hr>
                     <form action="" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {% for data in form %}
@@ -136,9 +142,10 @@ video {
 
                 </div>
                 <div class="card-body">
-                    <button id="add" class="d-flex float-end fs-5  btn btn-success">Add vedios</button>
-                    <h4 class="card-title titlecenter mb-2 fs-2" id="vedio1">Your vedios </h4>
-                    <h4 class="card-title titlecenter mb-2 fs-2 d-none" id="vedio2">No vedios till now </h4>
+                    <button id="add" class="d-flex float-end fs-5  btn btn-success">Add videos</button>
+                    
+                    <h4 class="card-title titlecenter mb-2 fs-2" id="vedio1">Your videos </h4>
+                    <h4 class="card-title titlecenter mb-2 fs-2 d-none" id="vedio2">No videos till now </h4>
                     <hr class="mt-5">
                     <div id="hidevedio">
                         {% include 'coach/accordian.html' %}
@@ -224,30 +231,6 @@ video {
                   </table>
                 {% endif %}
 
-                {% comment %} pending players {% endcomment %}
-                {% if pendingplayer %}
-                <h4 class="card-title titlecenter fs-2 alert alert-primary">Pending Players </h4>
-                <table class="table shadow-lg">
-                    <thead>
-                        <tr class="fs-5">
-                            <th>Sr.No</th>
-                            <th>Username </th>
-                            <th>Train</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for player in pendingplayer %}
-                        <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td>{{player.PlayerId.username}}</td>
-                            <td><a type="button" href="{% url 'trainplayer' player.PlayerId.id %}"
-                                    class="btn btn-danger mx-2">Train</a></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% endif %}
-
             </div>
         </div>
     </div>
@@ -258,6 +241,33 @@ video {
 {% block js %}
 
 <script>
+    document.getElementById("btncl").addEventListener("click",e=> {
+        let cat = document.getElementById("Category").value;
+
+        $.ajax({
+            url:"{% url 'category' %}",
+            method :"POST",
+            data:{
+                category:cat,
+                csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val()
+            },
+            success : response => {
+                if(response.status == 200) {
+                    console.log("data addedd");
+                }else {
+                    console.log("something went wrong ")
+                }
+            }
+
+        })
+    })
+
+
+   let cat= document.getElementById("id_category")
+   for(let i=0;i<cat.length;i++) {
+       cat[i].value = cat[i].value
+       console.log(cat[i])
+   }
     onclick = "this.paused ? this.play():this.pause();"
     document.getElementById("add").addEventListener("click", e => {
         // console.log('clicked');

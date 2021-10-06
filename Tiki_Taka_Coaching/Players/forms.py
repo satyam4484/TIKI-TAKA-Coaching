@@ -1,6 +1,6 @@
 # from django import forms 
 from django.contrib.auth import forms
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,UserChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, UserCreationForm,AuthenticationForm,UserChangeForm
 
 from django.contrib.auth import get_user_model
 from django import forms
@@ -24,10 +24,15 @@ class LoginForm(AuthenticationForm):
         model = User
         fields = ['username','password']
 
-class getdata(forms.Form):
-    username = forms.CharField()
+class PasswordChangeForm(PasswordChangeForm):
+    old_password=forms.CharField(label_suffix='',label='old Password',widget=forms.TextInput(attrs={'class':'form-control','placeholder':'old password'}))
+    new_password1=forms.CharField(label_suffix='',label='New Password',widget=forms.PasswordInput(attrs={'class':'form-control ','placeholder':'new password'}))
+    new_password2=forms.CharField(label_suffix='',label='Confirm password',widget=forms.PasswordInput(attrs={'class':'form-control ','placeholder':'confirm password'}))
+    password = None
     class Meta:
-        fields = ['username']
+        model = User
+
+        fields = ['old_password','new_password1','new_password2']
 
 
 class userchangeform(UserChangeForm):
@@ -35,11 +40,11 @@ class userchangeform(UserChangeForm):
     first_name=forms.CharField(label_suffix='',label='First Name ',widget=forms.TextInput(attrs={'class':'form-control','placeholder':'First Name '}))
     last_name=forms.CharField(label_suffix='',label='Last Name',widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Last Name '}))
     email=forms.EmailField(label_suffix='',label='Email',widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'user@gmail.com '}))
-    usertype = forms.CharField(widget=forms.TextInput({'value':"player",'id':"usertype",'readonly':'','class':'form-control'}))
+    # usertype = forms.CharField(widget=forms.TextInput({'value':"player",'id':"usertype",'readonly':'','class':'form-control'}))
     password=None
     class Meta:
         model = User
-        fields =['username','first_name','last_name','email','usertype']
+        fields =['username','first_name','last_name','email']
 
 class DateInput(forms.DateInput):
     input_type = 'date'

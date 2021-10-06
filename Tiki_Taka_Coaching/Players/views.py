@@ -1,17 +1,31 @@
-from django.contrib.messages.api import warning
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect
-from .forms import Signupform, LoginForm,userchangeform,PlayerUpdateForm,ParentUpdateForm
+from .forms import Signupform, LoginForm,userchangeform,PlayerUpdateForm,ParentUpdateForm,PasswordChangeForm
 from Coach.forms import CoachUpdateForm,SubmitVedio
-# Create your views here.
 from Coach.models import CoachData,Category,VedioSubmission,VedioContent
-from django.contrib.auth import authenticate, forms, get_user_model
+from django.contrib.auth import authenticate, get_user_model
 User = get_user_model()
 from .models import ParentData,PlayerData
-from django.contrib.auth import login,logout
+from django.contrib.auth import login,logout,update_session_auth_hash
 from django.contrib import messages
 
+# home page 
+def home(request):
+    val = 0
+    if request.user.is_authenticated:
+        UserType = User.objects.get(username = request.user).UserType
+        val = 1
+        if UserType == "coach":
+            val = 2
+        elif UserType == "parent":
+            val = 3
+        
+    return render(request,'main.html',{'UserType':val})
+
+
+
+# see the Detailed explantion of the vedio 
 def VedioDetails(request,pk):
     if request.user.is_authenticated and User.objects.get(username=request.user).UserType == "player":
         vedio = VedioContent.objects.get(pk=pk)
@@ -51,6 +65,8 @@ def VedioDetails(request,pk):
         messages.error(request,"You Don't have access to this page!")
         return HttpResponseRedirect('/')
 
+
+# see the list of players enrolled 
 def PlayerCourse(request):
     if request.user.is_authenticated and User.objects.get(username=request.user).UserType == "player":
         vedios=[]
@@ -73,19 +89,9 @@ def PlayerCourse(request):
         messages.error(request,"You Don't have access to this page ")
         return HttpResponseRedirect('/')
 
-def home(request):
-    val = 0
-    if request.user.is_authenticated:
-        UserType = User.objects.get(username = request.user).UserType
-        val = 1
-        if UserType == "coach":
-            val = 2
-        elif UserType == "parent":
-            val = 3
-        
-    return render(request,'main.html',{'UserType':val})
 
 
+# player home page 
 def PlayerHome(request):
     if request.user.is_authenticated and User.objects.get(username=request.user).UserType=="player":
         user = User.objects.get(username = request.user)
@@ -103,7 +109,7 @@ def PlayerHome(request):
             'user':user,
             'coach':coach,
             'submission':submission,
-            'pp':0,
+            'pp':1,
         }
         return render(request,'player/profile.html',context)
     else :
@@ -131,27 +137,44 @@ def ViewPlayerProfile(request,pk):
 
 
 
-# to be implemented 
+# get the data of the player 
 def AddParentChild(request):
-    pass
+    if request.method=="GET" and User.objects.get(username=request.GET['parent']).UserType=="parent":
+        username = request.GET['username']
+        try:
+            user = get_object_or_404(User,username=username,UserType="player")
 
-    # if request.method=="GET" and User.objects.get(username=request.GET['parent']).UserType=="parent":
-    #     username = request.GET['username']
-    #     try:
-    #         user = get_object_or_404(User,username=username,UserType="player")
-    #         parent = get_object_or_404(User, username = request.user)
-    #         parent = ParentData.objects.get(ParentId=parent.id)
-    #         parent.PlayerName = user.id
-    #         parent.save()
-    #         return JsonResponse({"status":200,"player":user.id})
-    #     except:
-    #         return JsonResponse({"status":200,"player":user.id})
-    # else :
-    #     return JsonResponse({"status":401})
+            return JsonResponse({"status":200,"player":user.id})
+        except:
+            return JsonResponse({'status':401,"msg":"player not found"});
+    else :
+        return JsonResponse({"status":401})
     
 
+# change user password 
+def ChangePasswordUser(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = PasswordChangeForm(request.user,request.POST)
+            if form.is_valid():
+                user = form.save()
+                update_session_auth_hash(request,user)
+                messages.success(request,'password changed successfully')
+                return HttpResponseRedirect('/')
+        else :
+            form = PasswordChangeForm(request.user)
+        
+        context = {
+            'form':form,
+            'formtype':'Change Password Form',
+            'val':0,
+            }
+        return render(request,'auth/login.html',context)
+    else:
+        messages.error(request,"You Don't have access ")
+        return HttpResponseRedirect('/')
 
-
+# user login 
 def UserLogin(request):
     if not request.user.is_authenticated:
         if request.method =="POST":
@@ -182,13 +205,13 @@ def UserLogin(request):
         messages.error(request,"You are already logged in")
         return HttpResponseRedirect(f'{request.META.get("HTTP_REFERER")}')
 
-
+# user logout 
 def Userlogout(request):
     logout(request)
     messages.warning(request,"You have been logout !")
     return HttpResponseRedirect('/')
 
-
+# edit user profile 
 def EditProfile(request,id):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -230,7 +253,7 @@ def EditProfile(request,id):
         return HttpResponseRedirect(f'{request.META.get("HTTP_REFERER")}')
  
     
-
+# user Sign up page logic 
 def UserSignup(request):
     if not request.user.is_authenticated:
         if request.method=="POST":

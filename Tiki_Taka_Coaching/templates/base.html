@@ -2,26 +2,19 @@
 {% load static %}
 <html lang="en">
   <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
     <script src="https://kit.fontawesome.com/2b8d05eca5.js" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'css/mystyle.css' %}">
     <style>
     body{
         background-color:#f4f0f4;
     }
-    #footer {
-      {% comment %} position:absolute; {% endcomment %}
-      bottom:0;
-      margin-top:55vh;
-      {% comment %} margin-bottom:10vw; {% endcomment %}
-      width:100%;
-    }
-
+    
     {% block css %}{% endblock css %}
     </style>
     
@@ -29,32 +22,75 @@
   </head>
   <body>
 
-
     {% include 'navbar.html' %}
 
-    {% if messages %}
-            {% for message in messages %}
-                <div {% if message.tags %}class="alert alert-{{message.tags}} text-center fs-3 ms" {% endif %}  role="alert">
-                    {{message}}
-                </div>
-            {% endfor %}
-        {% endif %}
+    <div id="msg"class="alert alert-danger text-center fs-3 d-none" role="alert">
+      Error ! Enter A valid UserName
+    </div>
 
+    {% comment %} block for messsages  {% endcomment %}
+    {% if messages %}
+        {% for message in messages %}
+            <div {% if message.tags %} id="msg"class="alert alert-{{message.tags}} text-center fs-3 ms" {% endif %}  role="alert">
+                {{message}}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% comment %} content block  {% endcomment %}
     {% block content %}
     
     {% endblock content %}
 
+    {% comment %} footer  {% endcomment %}
     {% include 'footer.html' %}
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
 
+    <script src="{% static 'js/bootstrap.js' %}"></script>
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/myscripts.js' %}"></script>
 
+    {% comment %} some sciptr code  {% endcomment %}
     <script>
       setTimeout(() => {
               $(".ms").fadeToggle(1000);
       }, 2000);
+
+    {% comment %} code for getting player data requested by parent  {% endcomment %}
+    $("#get").click(e=>{
+        e.preventDefault();
+        console.log("clicked");
+
+        let username = document.getElementById("find").value;
+        let parent = "{{request.user}}"
+        $.ajax({
+            url:"{% url 'addplayer' %}",
+            method:"GET",
+            data:{
+                "username":username,
+                "parent": parent
+            },
+            success: response=>{
+                if(response.status == 200) {
+                  console.log(response.player)
+
+                    window.location.href = `http://127.0.0.1:8000/player/viewprofile/${response.player}`                                           
+                }else {
+                    showerror();
+                }
+            }
+        })
+    })
+
+    function showerror(){
+      document.getElementById("msg").classList.remove("d-none");
+
+      setInterval(() => {
+        document.getElementById("msg").classList.add("d-none");
+
+      }, 2000);
+    }
+
     </script>
 
     {% block js %}

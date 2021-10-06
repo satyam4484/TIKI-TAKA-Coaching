@@ -9,7 +9,7 @@ admin.site.register(Category)
 
 @admin.register(VedioContent)
 class VedioAdmin(admin.ModelAdmin):
-    list_display = ['id','category','VedioTitle','Desc','thumbnail','vedio']
+    list_display = ['id','category','author','VedioTitle','Desc','thumbnail','vedio']
 
 @admin.register(VedioSubmission)
 class SubmissionAdmin(admin.ModelAdmin):

@@ -3,7 +3,6 @@
 
 {% block css %}
 
-
 hr{
     border: 5px solid black;
 }
@@ -18,6 +17,7 @@ body{
 	background-color: rgb(13, 12, 26);
 }
 #more {display: none;}
+
 {% endblock css %}
 
 {% block content %}
@@ -46,8 +46,8 @@ body{
                 {% if submission %}
                     {% if submission.marks %}
                         {% if submission.marks <= 3 %}
-                            <h1>You Vedio was not good you need to upload it again</h1>
-                            <button type="submit" id="upload" class="btn btn-warning mt-2">Submit your vedio</button>
+                            <h1>You Video was not good you need to upload it again</h1>
+                            <button type="submit" id="upload" class="btn btn-warning mt-2">Submit your video</button>
                                 <div class="container d-none mt-2" id="vedio">
                                     <form action="" method="post" enctype="multipart/form-data">
                                         {% csrf_token %}
@@ -69,7 +69,7 @@ body{
                         <h1 class="fw-bold alert-danger mt-1 text-center">Your Submission is under Review ! Wait For The Result </h1>
                     {% endif %}
                 {% else %}
-                    <button type="submit" id="upload" class="btn btn-warning mt-2">Submit your vedio</button>
+                    <button type="submit" id="upload" class="btn btn-warning mt-2">Submit your video</button>
                     <div class="container d-none mt-2" id="vedio">
                         <form action="" method="post" enctype="multipart/form-data">
                             {% csrf_token %}

@@ -40,6 +40,7 @@ video {
                 {% if pp %}
                 <div class="row pad_top">	
                     <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-9 col-lg-2 col-xl-2 textright pad_0"><p class="marbot titlesize"><a  href="{% url 'course' %}" type="button" class="btn btn-outline-danger btn-sm button1">Go to Course</a></p></div>
+                    <div class=" col-xs-12 col-sm-12  col-md-12 offset-lg-9 col-lg-2 col-xl-2 textright pad_0"><p class="marbot titlesize"><a  href="{% url 'changepassword' %}" type="button" class="btn btn-outline-danger btn-sm button1">Change Password</a></p></div>
                     <div class=" col-xs-12 col-sm-12  col-md-12  col-lg-1 col-xl-1 textright "><p class="marbot titlesize"><a  href="{% url 'editprofile' user.id %}"type="button" class="btn btn-outline-secondary btn-sm  button1"><i class="fa fa-pencil" aria-hidden="true"></i></a></p></div>
                 </div>
                 {% endif %}
